@@ -8,10 +8,6 @@ import logo from './logo.png';
 
 const Home = () => {
   const navigate = useNavigate();
-
-  // Estado para manejar los valores de los inputs
-  const [name, setName] = useState('');
-  const [age, setAge] = useState('');
   const [responses, setResponses] = useState({
     question1: 0,
     question2: 0,
@@ -22,6 +18,10 @@ const Home = () => {
     question7: 0,
     question8: 0,
   });
+  const [resistencia, setResistencia] = useState('');
+  const [resistenciaValue, setResistenciaValue] = useState(0);
+  const [RQD, setRQD] = useState('');
+  const [RQDValue, setRQDValue] = useState(0);
 
    // Estado para manejar la visibilidad del modal
    const [isModalOpen, setIsModalOpen] = useState(false);
@@ -34,10 +34,62 @@ const Home = () => {
     }));
   };
 
+  const handleResistenciaChange = (e) => {
+    const value = e.target.value;
+    setResistencia(value);
+  
+    // Convertir el valor a número y aplicar las condiciones
+    const numValue = parseFloat(value);
+    let points = 0;
+  
+    if (numValue > 250) {
+      points = 15;
+    } else if (numValue >= 100 && numValue <= 250) {
+      points = 12;
+    } else if (numValue >= 50 && numValue < 100) {
+      points = 7;
+    } else if (numValue >= 25 && numValue < 50) {
+      points = 4;
+    } else if (numValue >= 5 && numValue < 25) {
+      points = 2;
+    } else if (numValue >= 1 && numValue < 5) {
+      points = 1;
+    } else if (numValue < 1) {
+      points = 0;
+    }
+  
+    setResistenciaValue(points);
+  };
+
+  const handleRQDChange = (e) => {
+    const valor = e.target.value;
+    setRQD(valor);
+  
+    // Convertir el valor a número y aplicar las condiciones
+    const numValor = parseFloat(valor);
+    let point = 0;
+  
+    if (numValor > 100) {
+      alert('El RQD va de 0 a 100% Estudie pendejo');
+    } else if (numValor >= 90 && numValor <= 100) {
+      point = 20;
+    } else if (numValor >= 75 && numValor < 90) {
+      point = 17;
+    } else if (numValor >= 50 && numValor < 75) {
+      point = 13;
+    } else if (numValor >= 25 && numValor < 50) {
+      point = 6;
+    } else{
+      point = 3;
+    }
+  
+    setRQDValue(point);
+  };
+
    // Función para manejar el envío de respuestas
    const handleSubmit = () => {
     // Calcular el RMR sumando los valores de las respuestas
-    const totalRMR = Object.values(responses).reduce((acc, curr) => acc + curr, 0) + parseFloat(name) + parseFloat(age);
+    const totalRMR = Object.values(responses).reduce((acc, curr) => acc + curr, 0) + resistenciaValue + RQDValue;
     setRMR(totalRMR);
 
     // Mostrar el modal después de enviar
@@ -48,9 +100,25 @@ const Home = () => {
    const getRMRMessage = (RMR) => {
     if (RMR > 80) return "Tipo 1 Muy buena. Masa rocosa excelente (capaz de soportar grandes cargas sin problemas).";
     if (RMR >= 61) return "Tipo 2 Buena. Buena masa rocosa (buena capacidad de soporte).";
-    if (RMR >= 41) return "Tipo 3 Media. Masa rocosa razonablemente buena (soporte moderado).";
+    if (RMR >= 41) return "Tipo 3 Regular. Masa rocosa razonablemente buena (soporte moderado).";
     if (RMR >= 21) return "Tipo 4 Mala. Masa rocosa deficiente (soporte débil).";
     return "Tipo 5 Muy Mala. Masa rocosa muy pobre (requiere refuerzo o es inadecuada para excavación).";
+  };
+
+  const getotherMessage = (RMR) => {
+    if (RMR > 80) return "RMR > 81:  Masa rocosa excelente. Avances de 3 m (capaz de soportar grandes cargas sin problemas). para el sostenimiento solo se utilizara algún bulon ocasional y el precio aproximado USD/m es 0 Roca autosostenible.";
+    if (RMR >= 61) return "61-80: Buena masa rocosa. Avances de 1.5-3 m (buena capacidad de soporte). Bulonado local (enbóveda) Arcos ligeros, con separación de 1,5-2 m y el precio aproximado USD/m 300-400";
+    if (RMR >= 41) return "41-60: Masa rocosa razonablemente buena. Avances de 1.5-2 m (soporte moderado). Bulonado sistemático (L-3-4 m. S=1-1.5 m) Arcos medios. separación de 1-1.5 m y el precio aproximado USD/m 500-700";
+    if (RMR >= 21) return "21-40: Masa rocosa deficiente. Avances de 1-1.5 m (soporte débil). Bulonado sistemático (L-4-5 m. S=1-1.5 m) Arcos pesados, Separación 0.75-1 m y el precio aproximado USD/m 700-900";
+    return "0-20: Masa rocosa muy pobre. Avances de 0.5-1 m (requiere refuerzo o es inadecuada para excavación). Bulonado sistemático (L-5-6 m. S=1-1.5 m). Arcos pesados, Separación 0.75-1 m y el precio aproximado USD/m 900-1300";
+  };
+
+  const getGoyoMessage = (RMR) => {
+    if (RMR > 80) return "Factor de seguridad = 1.35";
+    if (RMR >= 61) return "Factor de seguridad = 1.62";
+    if (RMR >= 41) return "Factor de seguridad = 1.685";
+    if (RMR >= 21) return "Factor de seguridad = 1.263";
+    return "Factor de seguridad = 1.062";
   };
 
 
@@ -73,21 +141,6 @@ const Home = () => {
     };
 
     // Función para recargar y volver a responder
-  const reloadAndRetry = () => {
-    setResponses({
-      question1: 0,
-      question2: 0,
-      question3: 0,
-      question4: 0,
-      question5: 0,
-      question6: 0,
-      question7: 0,
-      question8: 0,
-
-    });
-    setRMR(0);
-    setIsModalOpen(false);
-  };
 
   return (
     <div className="home-container">
@@ -113,19 +166,42 @@ const Home = () => {
               <input 
                 type="number" 
                 placeholder="Ingrese la resistencia" 
-                value={name} 
-                onChange={(e) => setName(e.target.value)}
-                 
+                value={resistencia} 
+                onChange={handleResistenciaChange}
+                min="0"
+                step="0.1"
               />
+              {resistencia && (
+                <span style={{ 
+                  display: 'block', 
+                  fontSize: '0.9em', 
+                  color: '#666', 
+                  marginTop: '4px' 
+                }}>
+                  Puntos: {resistenciaValue}
+                </span>
+              )}
             </label>
             <label>
               RQD
               <input 
                 type="number" 
                 placeholder="Ingrese el RQD" 
-                value={age} 
-                onChange={(e) => setAge(e.target.value)} 
+                value={RQD} 
+                onChange={handleRQDChange}
+                min="0"
+                step="0.1"
               />
+              {RQD && (
+                <span style={{ 
+                  display: 'block', 
+                  fontSize: '0.9em', 
+                  color: '#666', 
+                  marginTop: '4px' 
+                }}>
+                  Puntos: {RQDValue}
+                </span>
+              )}
             </label>
           </div>
 
@@ -350,22 +426,22 @@ const Home = () => {
             <h3>¿Cómo describirías el espaciamiento entre las grietas o fracturas de la roca?</h3>
             <div className="answers">
               <label>
-                <input type="radio" name="question8" value="10" onChange={(e) => handleResponseChange('question8', e.target.value)}/>
+                <input type="radio" name="question8" value="7" onChange={(e) => handleResponseChange('question8', e.target.value)}/>
                 El espacio mide aproximadamente entre una y tres cuartas?
               </label>
 
               <label>
-                <input type="radio" name="question8" value="5" onChange={(e) => handleResponseChange('question8', e.target.value)}/>
+                <input type="radio" name="question8" value="2" onChange={(e) => handleResponseChange('question8', e.target.value)}/>
                 El espacio mide más o menos 4 dedos?
               </label>
 
               <label>
-                <input type="radio" name="question8" value="17" onChange={(e) => handleResponseChange('question8', e.target.value)}/>
+                <input type="radio" name="question8" value="14" onChange={(e) => handleResponseChange('question8', e.target.value)}/>
                 El espacio mide entre medio metro a dos metros?
               </label>
 
               <label>
-                <input type="radio" name="question8" value="20" onChange={(e) => handleResponseChange('question8', e.target.value)}/>
+                <input type="radio" name="question8" value="17" onChange={(e) => handleResponseChange('question8', e.target.value)}/>
                 El espacio mide alrededor de dos metros?
               </label>
 
@@ -383,6 +459,8 @@ const Home = () => {
             <div className="modal-content">
               <h3>RMR: {RMR}</h3>
               <p>{getRMRMessage(RMR)}</p>
+              <p>{getotherMessage(RMR)}</p>
+              <p>{getGoyoMessage(RMR)}</p>
               <button className="outt-button" onClick={closeModal}>Cerrar</button>
               <button className="ok-button" onClick={() => window.location.reload()}>Recargar y volver a responder</button>
             </div>
