@@ -107,14 +107,15 @@ const Home = () => {
           <h3>Para empezar rellena los campos</h3>
 
           {/* Primera sección: 2 Inputs */}
-          <div className="input-section">
+          <div className="input">
             <label>
               Resistencia
               <input 
                 type="number" 
                 placeholder="Ingrese la resistencia" 
                 value={name} 
-                onChange={(e) => setName(e.target.value)} 
+                onChange={(e) => setName(e.target.value)}
+                 
               />
             </label>
             <label>
@@ -136,7 +137,7 @@ const Home = () => {
             <h3>¿Cómo describirías la abertura de las grietas en la roca? ¿Son grandes como una fisura ancha o pequeñas como líneas finas?</h3>
             <div className="answers">
               <label>
-                <input type="radio" name="question1" value="0" onChange={(e) => handleResponseChange('question1', e.target.value)}/>
+                <input type="radio" name="question1" value="0" onChange={(e) => handleResponseChange('question1', e.target.value)} required/>
                 ¿La abertura es tan grande como el tamaño de tu dedo pequeño de la mano o es más grande?
               </label>
               <label>
@@ -382,8 +383,8 @@ const Home = () => {
             <div className="modal-content">
               <h3>RMR: {RMR}</h3>
               <p>{getRMRMessage(RMR)}</p>
-              <button onClick={closeModal}>Cerrar</button>
-              <button onClick={() => window.location.reload()}>Recargar y volver a responder</button>
+              <button className="outt-button" onClick={closeModal}>Cerrar</button>
+              <button className="ok-button" onClick={() => window.location.reload()}>Recargar y volver a responder</button>
             </div>
           </div>
         )}

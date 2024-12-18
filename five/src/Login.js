@@ -5,6 +5,7 @@ import './LoginPage.css';
 import backgroundImage from './background-image.jpg';
 import logo from './logo.png'; 
 
+
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -63,6 +64,17 @@ const LoginPage = () => {
           {error && <p className="error">{error}</p>}
           <button type="submit">Iniciar Sesión</button>
         </form>
+
+        <div className="team-section">
+          <h3>Diseñado / Desarrollado por</h3>
+          <ul>
+            <li>Albeiro J. Burbano Tobar</li>
+            <li>Linder Y. Rodriguez Cortes</li>
+            <li>Emerson O. Alvarez</li>
+            <li>Carlos A. Calderon</li>
+            <li>Erika C. Orbez</li>
+          </ul>
+        </div>
       </div>
     </div>
   );

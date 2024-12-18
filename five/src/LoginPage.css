@@ -86,3 +86,26 @@ body {
     text-align: center;
     margin-bottom: 20px;
 }
+
+.team-section {
+    margin-top: 20px;
+    text-align: center;
+    color: #ffffff;
+}
+
+.team-section h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #bf8a3c;
+}
+
+.team-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 16px;
+}
+
+.team-section ul li {
+    margin-bottom: 5px;
+}

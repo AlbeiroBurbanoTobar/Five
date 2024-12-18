@@ -9,13 +9,6 @@ const App = () => {
   const [loading, setLoading] = useState(true); 
   const [user, setUser] = useState(null); 
 
-  // Definir fecha de expiración (Ejemplo: 20 de diciembre de 2024)
-  const expirationDate = new Date('2024-12-13'); 
-  const currentDate = new Date();
-
-  // Verificar si el código ha expirado
-  const isExpired = currentDate > expirationDate;
-
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
@@ -31,11 +24,6 @@ const App = () => {
 
   if (loading) {
     return <div>Cargando...</div>;
-  }
-
-  // Si el código ha expirado, redirigir a una página de expiración o mostrar un mensaje
-  if (isExpired) {
-    return <div>El código ha expirado. No puedes usar la aplicación.</div>;
   }
 
   return (
